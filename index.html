@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trucklingo v2 </title>
+<style>
+:root{--g:#58cc02;--gd:#46a900;--b:#1cb0f6;--gold:#ffc800;--red:#ff4b4b;--ink:#202124;--muted:#667085;--bg:#f7f8fa;--card:#fff;--line:#e5e7eb}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+button{font:inherit;cursor:pointer}.top{height:68px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(18px,calc((100vw - 1180px)/2));position:sticky;top:0;z-index:10}
+.logo{font-size:26px;font-weight:950;color:var(--g);letter-spacing:-1px}.logo span{color:#222}.stats{display:flex;gap:8px}.stat{background:#f2f5f3;border-radius:12px;padding:9px 12px;font-weight:850}.app{max-width:1180px;margin:auto;padding:25px 18px 70px;display:grid;grid-template-columns:1fr 310px;gap:22px}
+.hero{background:linear-gradient(135deg,#dff8c8,#efffe6);border:1px solid #c8eca9;border-radius:22px;padding:24px;margin-bottom:18px;overflow:hidden;position:relative}.hero:after{content:"";position:absolute;right:25px;bottom:-20px;font-size:105px;transform:rotate(-5deg)}h1{margin:0 0 5px;font-size:32px}.hero p{margin:0;color:#526052}
+.section{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;margin-bottom:18px}.section h2{margin:0 0 15px}
+.map{position:relative;padding:8px 0 18px}.map:before{content:"";position:absolute;left:50%;top:28px;bottom:20px;border-left:7px dotted #d5dadd}
+.node{position:relative;z-index:1;display:flex;justify-content:center;margin:20px 0}.node:nth-child(even){transform:translateX(55px)}.node:nth-child(odd){transform:translateX(-55px)}
+.lesson{border:0;width:250px;background:#fff;border:2px solid #dfe4e7;border-radius:18px;padding:14px;box-shadow:0 4px 0 #dfe4e7;display:flex;align-items:center;gap:12px;text-align:left}.lesson:hover:not(:disabled){transform:translateY(-3px)}.lesson:disabled{opacity:.5;cursor:not-allowed}.lesson.done{border-color:#9bdd72}.circle{width:55px;height:55px;flex:none;border-radius:50%;background:var(--g);color:#fff;display:grid;place-items:center;font-size:25px;font-weight:900;box-shadow:inset 0 -4px rgba(0,0,0,.12)}.lesson h3{margin:0 0 2px;font-size:17px}.lesson small{color:var(--muted)}
+.side{height:max-content;position:sticky;top:90px}.quest,.achievement,.leader{border:1px solid var(--line);border-radius:18px;background:#fff;padding:17px;margin-bottom:14px}.quest h3,.achievement h3,.leader h3{margin:0 0 12px}.qrow{margin:10px 0}.qtop{display:flex;justify-content:space-between;font-size:13px;font-weight:750}.track{height:9px;background:#eceff0;border-radius:99px;overflow:hidden;margin-top:5px}.fill{height:100%;background:var(--g);transition:width .5s}
+.ach{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.badge{background:#f5f6f7;border-radius:12px;text-align:center;padding:9px;font-size:12px}.badge.on{background:#fff3c2}.badge div{font-size:24px}
+.leader ol{margin:0;padding-left:26px}.leader li{padding:7px 0;border-bottom:1px solid #eee;font-weight:700}.leader li:last-child{border:0}.you{color:var(--g)}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:16px;z-index:20}.modal.show{display:flex}.card{width:min(650px,100%);background:#fff;border-radius:24px;padding:25px;box-shadow:0 25px 70px #0004;animation:pop .25s ease}.x{float:right;border:0;border-radius:50%;width:36px;height:36px}.q{font-size:25px;font-weight:900;text-align:center;margin:27px 0}.answers{display:grid;gap:10px}.ans{padding:14px;border:2px solid #dfe4e7;border-radius:13px;background:#fff;text-align:left;font-weight:750}.ans.correct{background:#e9ffd9;border-color:var(--g);animation:bounce .35s}.ans.wrong{background:#fff0f0;border-color:var(--red);animation:shake .35s}.feedback{text-align:center;min-height:26px;font-weight:850;margin:12px}.next{width:100%;padding:14px;border:0;border-radius:13px;background:var(--g);color:#fff;font-weight:900;box-shadow:inset 0 -3px #0002}.next:disabled{background:#cbd5cf;box-shadow:none}.heartsbar{text-align:center;font-size:22px;margin-top:7px}.result{text-align:center}.result .emoji{font-size:60px}.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden}.piece{position:absolute;font-size:25px;animation:fall 1.2s linear forwards}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}@keyframes shake{25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-5px)}}@keyframes bounce{50%{transform:scale(1.04)}}@keyframes fall{to{transform:translateY(110vh) rotate(500deg);opacity:0}}
+@media(max-width:850px){.app{grid-template-columns:1fr}.side{position:static}.node:nth-child(even),.node:nth-child(odd){transform:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="logo">Truck<span>lingo</span></div><div class="stats"><button class="stat" onclick="showSettings()">⚙️</button><div class="stat">🔥 <span id="streak">0</span></div><div class="stat">⭐ <span id="xp">0</span></div><div class="stat">❤️ <span id="lives">5</span></div></div></header>
+<main class="app"><section>
+<div class="hero"><h1>Bowtruckle Adventure</h1><p>Learn the language. Become fluent in the world of Bowtruckle. 🌿</p></div>
+<div class="section"><h2>🗺️ Learning Path</h2><div class="map" id="map"></div></div>
+</section>
+<aside class="side">
+<div class="quest"><h3>🎯 Daily Quests</h3><div id="quests"></div></div>
+<div class="achievement"><h3>🏆 Achievements</h3><div class="ach" id="ach"></div></div>
+<div class="leader"><h3>🏅 Leaderboard</h3><ol><li>Bowtruckle — 1840 XP</li><li>Blake — 1620 XP</li><li>Hera — 1490 XP</li><li class="you">You — <span id="rankxp">0</span> XP</li><li>Tungtruckle — 710 XP</li></ol></div>
+</aside></main>
+<div class="modal" id="modal"><div class="card"><button class="x" onclick="closeLesson()">×</button><div id="body"></div></div></div><div class="confetti" id="confetti"></div>
+<script>
+const W=[
+["Orange","Orange"],["Yellow","Yellow"],["White","White"],["Redtruckle","Red"],["Bloo","Blue"],["Pink","Pink"],["isjustblack","Black"],["Green","Green"],
+["Film","Watch"],["Gum","Bubblegum"],["Triple T","Tung Tung Tung Sahur"],["Notruckle","No"],["Twerktruckle","Twerk"],["Holiday","Holiday"],["Water","Water"],["WaterWaterGopGopGop","Drinking"],["Sleep","Sleep"],["Bum","Bum"],["Dream","Dream"],["Spidertruckling","Doing spiderman things"],["Hottteruckle (Hot Truckle)","Hot"],["Dancetruckle","Dance"],["Happytruckle","Happy"],["Sadtruckle","Sad"],["Angrytruckle","Angry"]];
+const N=[
+["Bowtruckle","Bowtruckle"],["Blake","Blake"],["Hera","Hera"],["Twintruckle","Twin"],["Tow Truckle","Tow Trucks"],["Bigtruckle","Bowtruckle"],["Liltruckle","A small version of Bowtruckle around his neck"],["Tedbo","Ted"],["Trowbuckle","Family Friend"],["Monstertruckle","Rosie"],["Doughtruckle","Baker Cousin"],["Bowuncle","Bowtruckle's uncle"],["Aunttruckle","Bowtruckle's aunt"],["Grandtruckle","Used for grandparents"],["Tungtruckle","Tung Tung Tung Sahur"],["Bowfungle","Bowtruckle's second cousin (Part Mushroom)"],["Toetruckle","Bowtruckle's middle toe"],["Frenchtruckle","Bowtruckle's french uncle"],["Spidertruckle","Spiderman but truckle"],["Bowtweakle","Bowtruckle's tweaky aunt"],["Bowtwerkle","Bowtruckle when hes twerking"],["Bowtrucklet","Bowtruckle's Baby Sister"]];
+const units=[
+["🌈","Trucklean Basics",W.slice(0,8)],["🌿","Everyday Trucklean",W.slice(8)],["👑","The Names",N]
+];
+const defaultState={done:{},xp:0,streak:0,lives:5,quests:{learn:0,correct:0,xp:0},ach:{},settings:{sound:true}};
+let state; try{state=JSON.parse(localStorage.getItem("trucklingo-v2"))||structuredClone(defaultState)}catch(e){state=structuredClone(defaultState)}
+let cur=[],qi=0,score=0,unitIndex=-1,answered=false;
+
+function save(){localStorage.setItem("trucklingo-v2",JSON.stringify(state))}
+function beep(freq=600,d=.08){
+ if(!state.settings.sound)return;
+ try{const a=new (window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator(),g=a.createGain();o.frequency.value=freq;g.gain.value=.035;o.connect(g);g.connect(a.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,a.currentTime+d);o.stop(a.currentTime+d)}catch(e){}
+}
+function render(){
+ document.getElementById("map").innerHTML=units.map((u,i)=>{
+  const locked=i>0&&!state.done[i-1];
+  return `<div class="node"><button class="lesson ${state.done[i]?'done':''}" ${locked?'disabled':''} onclick="start(${i})">
+  <div class="circle">${state.done[i]?'✓':u[0]}</div><div><h3>${u[1]}</h3><small>${locked?'🔒 Complete previous lesson':state.done[i]?'Completed':'Start lesson · '+u[2].length+' questions'}</small></div></button></div>`
+ }).join("");
+ document.getElementById("xp").textContent=state.xp;
+ document.getElementById("rankxp").textContent=state.xp;
+ document.getElementById("streak").textContent=state.streak;
+ document.getElementById("lives").textContent=state.lives;
+ renderQuests();renderAch();
+}
+function renderQuests(){
+ const q=[["learn","📚 Complete 5 questions",5],["correct","🎯 Get 3 correct answers",3],["xp","⭐ Earn 50 XP",50]];
+ document.getElementById("quests").innerHTML=q.map(x=>`<div class="qrow"><div class="qtop"><span>${x[1]}</span><span>${Math.min(state.quests[x[0]],x[2])}/${x[2]}</span></div><div class="track"><div class="fill" style="width:${Math.min(100,state.quests[x[0]]/x[2]*100)}%"></div></div></div>`).join("");
+}
+function renderAch(){
+ const a=[["first","🥇","First Lesson",Object.keys(state.done).length>=1],["perfect","💯","Perfect",!!state.ach.perfect],["ten","🔥","10 Correct",state.quests.correct>=10],["xp","⭐","100 XP",state.xp>=100],["three","🗺️","Pathfinder",Object.keys(state.done).length>=3],["streak","🌿","3 Day Streak",state.streak>=3]];
+ document.getElementById("ach").innerHTML=a.map(x=>`<div class="badge ${x[3]?'on':''}"><div>${x[1]}</div>${x[2]}</div>`).join("");
+}
+function start(i){
+ if(i>0&&!state.done[i-1])return;
+ if(state.lives<=0){
+  openInfo("Out of hearts ❤️","You need at least one heart to start a lesson. Complete a lesson or use the heart refill below.","Refill heart",()=>{state.lives=5;save();render();});
+  return;
+ }
+ unitIndex=i;cur=units[i][2];qi=0;score=0;answered=false;
+ document.getElementById("modal").classList.add("show");question();
+}
+function closeLesson(){document.getElementById("modal").classList.remove("show")}
+function openInfo(title,text,buttonText,fn){
+ document.getElementById("body").innerHTML=`<div class="result"><div class="emoji">🌿</div><h2>${title}</h2><p>${text}</p><button class="next" id="infoBtn">${buttonText}</button></div>`;
+ document.getElementById("modal").classList.add("show");
+ document.getElementById("infoBtn").onclick=()=>{fn();closeLesson()};
+}
+function question(){
+ if(qi>=cur.length){finish();return}
+ const [truck,correct]=cur[qi];
+ const choices=[correct];
+ while(choices.length<4){const c=cur[Math.floor(Math.random()*cur.length)][1];if(!choices.includes(c))choices.push(c)}
+ choices.sort(()=>Math.random()-.5);answered=false;
+ document.getElementById("body").innerHTML=`<div style="color:#667085;font-weight:750">${qi+1}/${cur.length}</div>
+ <div class="heartsbar">${'❤️'.repeat(state.lives)}${'🖤'.repeat(5-state.lives)}</div>
+ <div class="q">What does <b>${truck}</b> mean?</div>
+ <div class="answers">${choices.map((c,i)=>`<button class="ans" data-value="${encodeURIComponent(c)}" onclick="answer(this,${i})">${c}</button>`).join("")}</div>
+ <div class="feedback" id="fb"></div><button class="next" id="next" disabled onclick="qi++;question()">Continue</button>`;
+}
+function answer(btn,index){
+ if(answered)return;answered=true;
+ const correct=cur[qi][1],val=decodeURIComponent(btn.dataset.value);
+ document.querySelectorAll(".ans").forEach(b=>b.disabled=true);
+ const fb=document.getElementById("fb");
+ state.quests.learn++;
+ if(val===correct){
+  btn.classList.add("correct");fb.textContent="Correct! +10 XP 🔥";state.xp+=10;state.quests.correct++;state.quests.xp+=10;score++;beep(760);
+ }else{
+  btn.classList.add("wrong");state.lives=Math.max(0,state.lives-1);fb.textContent="Not quite 😭 Correct answer: "+correct;beep(180);
+  document.querySelectorAll(".ans").forEach(b=>{if(decodeURIComponent(b.dataset.value)===correct)b.classList.add("correct")});
+ }
+ save();render();
+ if(state.lives<=0){
+   setTimeout(()=>restartCurrentSession(),700);
+   return;
+ }
+ const next=document.getElementById("next");if(next)next.disabled=false;
+}
+function restartCurrentSession(){
+  qi=0;score=0;answered=false;state.lives=5;save();render();
+  document.getElementById("body").innerHTML=`<div class="result"><div class="emoji">💔</div><h2>Out of hearts!</h2><p>Your current lesson has been restarted from the beginning.</p><p>❤️ Your hearts have been restored.</p><button class="next" id="restartBtn">Restart lesson</button></div>`;
+  document.getElementById("restartBtn").onclick=()=>{beep(600);question()};
+}
+function finish(){
+ const perfect=score===cur.length;
+ if(perfect)state.ach.perfect=true;
+ state.done[unitIndex]=true;
+ state.streak++;
+ state.lives=Math.min(5,state.lives+1);
+ save();beep(900,.18);
+ const unlocked=unitIndex<units.length-1?"<p>🌿 New lesson unlocked!</p>":"<p>🏆 You finished the whole path!</p>";
+ document.getElementById("body").innerHTML=`<div class="result"><div class="emoji">${perfect?'🏆':'🎉'}</div><h2>Lesson complete!</h2><p><b>${score}/${cur.length}</b> correct</p><p>+${score*10} XP • ❤️ +1 heart</p>${unlocked}<button class="next" id="finishBtn">Back to map</button></div>`;
+ document.getElementById("finishBtn").onclick=()=>{closeLesson();burst();render()};
+}
+function burst(){
+ const c=document.getElementById("confetti");for(let i=0;i<45;i++){const e=document.createElement("span");e.className="piece";e.textContent=['🎉','⭐','💚','🌿'][Math.floor(Math.random()*4)];e.style.left=Math.random()*100+'%';e.style.top='-30px';e.style.animationDelay=Math.random()*.4+'s';c.appendChild(e);setTimeout(()=>e.remove(),1800)}
+}
+function refillHearts(){state.lives=5;save();render()}
+function toggleSound(){
+ state.settings.sound=!state.settings.sound;save();
+ openInfo("Sound "+(state.settings.sound?"on 🔊":"off 🔇"),"Sound effects have been "+(state.settings.sound?"enabled.":"disabled."),"Done",()=>{});
+}
+function resetProgress(){
+ if(!confirm("Reset all Trucklingo progress? This cannot be undone."))return;
+ state=structuredClone(defaultState);save();render();
+}
+function showSettings(){
+ document.getElementById("body").innerHTML=`<div><h2>⚙️ Settings</h2><p>Manage your Trucklingo experience.</p>
+ <button class="next" id="soundBtn">${state.settings.sound?'🔊 Sound effects: ON':'🔇 Sound effects: OFF'}</button>
+ <div style="height:10px"></div><button class="next" id="heartBtn">❤️ Refill hearts</button>
+ <div style="height:10px"></div><button class="next" id="resetBtn" style="background:#ff4b4b">Reset progress</button></div>`;
+ document.getElementById("modal").classList.add("show");
+ document.getElementById("soundBtn").onclick=()=>{state.settings.sound=!state.settings.sound;save();showSettings();render()};
+ document.getElementById("heartBtn").onclick=()=>{state.lives=5;save();showSettings();render()};
+ document.getElementById("resetBtn").onclick=()=>{if(confirm("Reset all progress?")){state=structuredClone(defaultState);save();closeLesson();render()}};
+}
+render();
+</script></body></html>
