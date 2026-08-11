@@ -1,0 +1,117 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Trucklingo</title>
+<style>
+:root{--blue:#09a9e8;--green:#49bd3d;--ink:#15506a}
+*{box-sizing:border-box}body{background:#fff !important;margin:0;font-family:Arial,sans-serif;color:var(--ink);background:linear-gradient(#58dfff 0 52%,#80d75b 53%);min-height:100vh;background-attachment:fixed}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 15% 12%,#fff 0 8%,transparent 9%),radial-gradient(ellipse at 75% 15%,#fff 0 7%,transparent 8%),radial-gradient(circle at 30% 28%,#ffffff88 0 2%,transparent 3%);z-index:-1}
+header{height:70px;background:linear-gradient(#fff,#c9f7ff);border-bottom:3px solid #42bddd;display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:sticky;top:0;z-index:5;box-shadow:0 4px 12px #126d8655}.logo{font-size:28px;font-weight:900;color:#079bdd;text-shadow:0 2px #fff}.logo span{color:#216b86}.stats{display:flex;gap:8px}.stat,button{font-weight:800}.stat{padding:9px 12px;border-radius:12px;background:linear-gradient(#fff,#d8f8ff);border:1px solid #56c7e4;box-shadow:0 2px 5px #16768a44}
+main{max-width:1150px;margin:auto;padding:25px 18px;display:grid;grid-template-columns:1fr 300px;gap:20px}.hero,.panel,.sidebox{background:#fffffff0;border:2px solid #67cfe8;border-radius:20px;box-shadow:0 8px 20px #0875903d,inset 0 1px #fff;padding:20px}.hero{margin-bottom:18px;background:linear-gradient(135deg,#fff,#dffbff)}h1{margin:0 0 5px;font-size:32px}.hero p{margin:0}.map{position:relative;padding:10px}.map:before{content:"";position:absolute;left:50%;top:30px;bottom:30px;border-left:6px dotted #39b7d8}.node{display:flex;justify-content:center;margin:20px 0;position:relative;z-index:1}.node:nth-child(even){transform:translateX(55px)}.node:nth-child(odd){transform:translateX(-55px)}.lesson{width:260px;padding:14px;border-radius:18px;background:linear-gradient(#fff,#e7fbff);border:2px solid #56c7e4;box-shadow:0 4px #168db3;display:flex;gap:12px;align-items:center;text-align:left}.lesson:hover:not(:disabled){transform:translateY(-3px)}.lesson:disabled{opacity:.5}.circle{width:55px;height:55px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(#5fe0ff,#0699df);color:#fff;font-size:24px;box-shadow:inset 0 -5px #006d9c66}.sidebox{margin-bottom:15px}.sidebox h3{margin:0 0 12px}.q{margin:10px 0;font-size:13px}.track{height:9px;background:#d8f3f8;border-radius:10px}.fill{height:100%;background:linear-gradient(90deg,#43c8ff,#49c53c);border-radius:10px}.ach{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.badge{padding:8px;text-align:center;background:#eafaff;border-radius:10px;font-size:11px}.on{background:#fff1a9}.leader li{padding:7px;border-bottom:1px solid #ddd}.you{color:#079bdd}.modal{display:none;position:fixed;inset:0;background:#00608066;align-items:center;justify-content:center;padding:15px;z-index:10}.modal.show{display:flex}.card{width:min(650px,100%);padding:25px;background:linear-gradient(#fff,#eafcff);border:2px solid #60cce6;border-radius:22px;box-shadow:0 25px 60px #00566d66}.x{float:right;border:0;border-radius:50%;padding:8px}.qtext{text-align:center;font-size:25px;font-weight:900;margin:25px 0}.answers{display:grid;gap:10px}.ans,.next{padding:14px;border-radius:13px;border:2px solid #58c6e2;background:linear-gradient(#fff,#e9fbff);text-align:left}.next{width:100%;text-align:center;background:linear-gradient(#59dcff,#078ed0);color:#fff}.correct{border-color:#46bd3c!important;background:#e5ffd9!important}.wrong{border-color:#ff4b55!important;background:#ffeaea!important}.result{text-align:center}.result .emoji{font-size:55px}@media(max-width:800px){main{grid-template-columns:1fr}.sidebox{position:static}.node:nth-child(even),.node:nth-child(odd){transform:none}}
+</style>
+<style id="archive-aero-overhaul">
+:root{
+ --sky:#35c9ff;--sky2:#a8efff;--sea:#00aeea;--leaf:#53c900;--leaf2:#9be52d;
+ --glass:rgba(255,255,255,.72);--white:#fff;--blue:#087ec9;--deep:#075c9b;
+ --shadow:0 10px 28px rgba(0,88,150,.22),inset 0 1px rgba(255,255,255,.9);
+}
+body{background:#fff !important;
+ background:
+ radial-gradient(circle at 12% 18%,rgba(255,255,255,.95) 0 2%,transparent 3%),
+ radial-gradient(circle at 84% 12%,rgba(255,255,255,.8) 0 1.4%,transparent 2%),
+ linear-gradient(#36c9ff 0,#b8f5ff 42%,#d9f8c0 43%,#79d93d 100%);
+ background-attachment:fixed; color:#123f5c;
+}
+body:before{
+ content:"";position:fixed;inset:0;pointer-events:none;opacity:.25;
+ background:radial-gradient(ellipse at 20% 25%,#fff 0 4%,transparent 9%),
+            radial-gradient(ellipse at 70% 14%,#fff 0 3%,transparent 8%);
+ filter:blur(12px);z-index:-1;
+}
+.top{
+ height:76px;background:linear-gradient(#fff,#dff8ff 45%,#9deaff);
+ border-bottom:2px solid #058dcc;box-shadow:0 3px 12px #006fa855;
+}
+.logo{
+ color:#087ec9;text-shadow:0 2px #fff,0 3px 0 #8ddcfa;font-weight:1000;
+}
+.logo span{color:#45a900}
+.stat{
+ background:linear-gradient(#fff,#d9f8ff);border:1px solid #72d5f6;
+ box-shadow:inset 0 1px #fff,0 2px 4px #0076a933;color:#075c9b;
+}
+.app{max-width:1200px}
+.hero,.section,.quest,.achievement,.leader{
+ background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(224,250,255,.7));
+ border:2px solid rgba(255,255,255,.95);
+ box-shadow:var(--shadow);backdrop-filter:blur(8px);
+}
+.hero{position:relative;overflow:hidden}
+.hero:before{
+ content:"";position:absolute;right:10%;top:5px;width:170px;height:75px;
+ background:radial-gradient(ellipse,#fff 0 40%,transparent 42%);
+ opacity:.75;filter:blur(3px)
+}
+.hero:after{content:"🌿";font-size:90px;opacity:.75;right:35px;bottom:-12px;transform:none}
+.hero h1{color:#087ec9;text-shadow:0 2px #fff}
+.hero p{color:#24657d}
+.section h2,.quest h3,.achievement h3,.leader h3{color:#075c9b}
+.map:before{border-color:#54bdde}
+.lesson{
+ background:linear-gradient(#fff,#e9fbff 50%,#c5f0ff);
+ border:2px solid #58c7e8;box-shadow:0 5px 0 #168fc1,0 8px 14px #006fa833;
+ color:#075c9b;
+}
+.lesson:hover:not(:disabled){box-shadow:0 7px 0 #168fc1,0 12px 18px #006fa844}
+.circle{
+ background:radial-gradient(circle at 35% 25%,#d9ff8b,#59c800 55%,#2b9700);
+ box-shadow:inset 0 -5px #298e00,inset 0 2px #fff8,0 3px 8px #34880055;
+}
+.track{background:#b8eaf6;border:1px solid #79cfe5}
+.fill{background:linear-gradient(#baff4b,#4fc000 55%,#2d9700)}
+.badge{background:linear-gradient(#f8ffff,#d7f6ff);border:1px solid #9bdff1}
+.badge.on{background:linear-gradient(#ffffd9,#eaffaa);border-color:#b6d95b;box-shadow:inset 0 1px #fff}
+.modal{background:rgba(0,105,160,.42);backdrop-filter:blur(5px)}
+.card{
+ background:linear-gradient(#fff,#ecfbff);border:2px solid #fff;
+ box-shadow:0 20px 60px #00658c55,inset 0 1px #fff;
+}
+.x{background:linear-gradient(#fff,#bdeeff);border:1px solid #65c9ea;color:#075c9b}
+.ans{
+ background:linear-gradient(#fff,#e5faff);border:2px solid #68cbe9;
+ box-shadow:0 3px 0 #1a9aca;color:#075c9b;
+}
+.ans:hover{background:linear-gradient(#fff,#c7f3ff);transform:translateY(-1px)}
+.next{
+ background:linear-gradient(#b9ff4d,#55c800 55%,#359f00);
+ border:2px solid #fff;box-shadow:0 4px 0 #2c8d00,0 5px 10px #3c980055,inset 0 2px #fff8;
+}
+.next:active{transform:translateY(2px);box-shadow:0 2px 0 #2c8d00}
+.heartsbar{filter:drop-shadow(0 2px 2px #0075a555)}
+.q{color:#075c9b;text-shadow:0 1px #fff}
+.confetti{z-index:50}
+</style>
+<style>
+.aero-strip{
+ max-width:1200px;margin:10px auto 0;padding:8px 18px;display:flex;gap:22px;
+ justify-content:center;flex-wrap:wrap;color:#075c9b;font-size:11px;font-weight:900;
+ text-shadow:0 1px #fff;letter-spacing:.5px
+}
+</style></head><body>
+<header><div class="logo">Truck<span>lingo</span></div><div class="stats"><button class="stat" onclick="settings()">⚙️</button><div class="stat">🔥 <span id="streak">0</span></div><div class="stat">⭐ <span id="xp">0</span></div><div class="stat">❤️ <span id="hearts">5</span></div></div></header>
+<main><section><div class="hero"><h1>Bowtruckle Adventure 🌿</h1><p>Learn Trucklean and explore the world of Bowtruckle.</p></div><div class="panel"><h2>🗺️ Learning Path</h2><div class="map" id="map"></div></div></section>
+<aside><div class="sidebox"><h3>🎯 Daily Quests</h3><div id="quests"></div></div><div class="sidebox"><h3>🏆 Achievements</h3><div class="ach" id="ach"></div></div><div class="sidebox leader"><h3>🏅 Leaderboard</h3><ol><li>Bowtruckle — 1840 XP</li><li>Blake — 1620 XP</li><li>Hera — 1490 XP</li><li class="you">You — <span id="rank">0</span> XP</li></ol></div></aside></main>
+<div class="modal" id="modal"><div class="card"><button class="x" onclick="closeM()">×</button><div id="body"></div></div></div>
+<script>
+const W=[["Orange","Orange"],["Yellow","Yellow"],["White","White"],["Redtruckle","Red"],["Bloo","Blue"],["Pink","Pink"],["isjustblack","Black"],["Green","Green"],["Film","Watch"],["Gum","Bubblegum"],["Triple T","Tung Tung Tung Sahur"],["Notruckle","No"],["Twerktruckle","Twerk"],["Holiday","Holiday"],["Water","Water"],["WaterWaterGopGopGop","Drinking"],["Sleep","Sleep"],["Bum","Bum"],["Dream","Dream"],["Spidertruckling","Doing spiderman things"],["Hottteruckle (Hot Truckle)","Hot"],["Dancetruckle","Dance"],["Happytruckle","Happy"],["Sadtruckle","Sad"],["Angrytruckle","Angry"]];
+const N=[["Bowtruckle","Bowtruckle"],["Blake","Blake"],["Hera","Hera"],["Twintruckle","Twin"],["Tow Truckle","Tow Trucks"],["Bigtruckle","Bowtruckle"],["Liltruckle","A small version of Bowtruckle around his neck"],["Tedbo","Ted"],["Trowbuckle","Family Friend"],["Monstertruckle","Rosie"],["Doughtruckle","Baker Cousin"],["Bowuncle","Bowtruckle's uncle"],["Aunttruckle","Bowtruckle's aunt"],["Grandtruckle","Used for grandparents"],["Tungtruckle","Tung Tung Tung Sahur"],["Bowfungle","Bowtruckle's second cousin (Part Mushroom)"],["Toetruckle","Bowtruckle's middle toe"],["Frenchtruckle","Bowtruckle's french uncle"],["Spidertruckle","Spiderman but truckle"],["Bowtweakle","Bowtruckle's tweaky aunt"],["Bowtwerkle","Bowtruckle when hes twerking"],["Bowtrucklet","Bowtruckle's Baby Sister"]];
+const U=[["🌈","Trucklean Basics",W.slice(0,8)],["🌿","Everyday Trucklean",W.slice(8)],["👑","The Names",N]];
+let s=JSON.parse(localStorage.getItem("trucklingo-aero")||"null")||{done:{},xp:0,streak:0,hearts:5,q:{learn:0,correct:0,xp:0},sound:true};let cur=[],i=0,score=0,ui=0;
+function save(){localStorage.setItem("trucklingo-aero",JSON.stringify(s))}
+function render(){map.innerHTML=U.map((u,n)=>`<div class=node><button class=lesson ${s.done[n]?'done':''} ${n&&!s.done[n-1]?'locked':''} ${n&&!s.done[n-1]?'disabled':''} ${n&&!s.done[n-1]?'disabled':''} onclick="start(${n})" ${n&&!s.done[n-1]?'disabled':''}><div class=circle>${s.done[n]?'✓':u[0]}</div><div><b>${u[1]}</b><br><small>${n&&!s.done[n-1]?'🔒 Locked':s.done[n]?'Completed':u[2].length+' questions'}</small></div></button></div>`).join("");xp.textContent=s.xp;rank.textContent=s.xp;streak.textContent=s.streak;hearts.textContent=s.hearts;quests.innerHTML=[["learn","📚 Complete 5 questions",5],["correct","🎯 Get 3 correct",3],["xp","⭐ Earn 50 XP",50]].map(q=>`<div class=q>${q[1]} ${Math.min(s.q[q[0]],q[2])}/${q[2]}<div class=track><div class=fill style="width:${Math.min(100,s.q[q[0]]/q[2]*100)}%"></div></div></div>`).join("");ach.innerHTML=[["🥇","First Lesson",Object.keys(s.done).length>0],["💯","Perfect",s.perfect],["🔥","10 Correct",s.q.correct>=10],["⭐","100 XP",s.xp>=100],["🗺️","Pathfinder",Object.keys(s.done).length>=3],["🌿","3 Streak",s.streak>=3]].map(a=>`<div class="badge ${a[2]?'on':''}">${a[0]}<br>${a[1]}</div>`).join("")}
+function start(n){if(n&& !s.done[n-1])return;if(!s.hearts){restartPrompt();return}ui=n;cur=U[n][2];i=0;score=0;openM();question()}
+function openM(){modal.classList.add("show")}function closeM(){modal.classList.remove("show")}
+function restartPrompt(){openM();body.innerHTML=`<div class=result><div class=emoji>💔</div><h2>Out of hearts!</h2><p>Your session will restart when you lose all your hearts.</p><button class=next onclick="s.hearts=5;save();render();closeM()">Restore Hearts</button></div>`}
+function question(){if(i>=cur.length)return finish();let [word,correct]=cur[i],a=[correct];while(a.length<4){let x=cur[Math.random()*cur.length|0][1];if(!a.includes(x))a.push(x)}a.sort(()=>Math.random()-.5);body.innerHTML=`<div>${i+1}/${cur.length}</div><div style="text-align:center;font-size:22px">${'❤️'.repeat(s.hearts)}${'🖤'.repeat(5-s.hearts)}</div><div class=qtext>What does <b>${word}</b> mean?</div><div class=answers>${a.map(x=>`<button class=ans data-v="${encodeURIComponent(x)}" onclick="answer(this)">${x}</button>`).join("")}</div><p id=fb style="text-align:center;min-height:20px;font-weight:bold></p><button class=next id=next disabled onclick="i++;question()">Continue</button>`}
+function answer(b){if(b.disabled)return;let correct=cur[i][1],v=decodeURIComponent(b.dataset.v);document.querySelectorAll(".ans").forEach(x=>x.disabled=true);s.q.learn++;if(v===correct){b.classList.add("correct");fb.textContent="Correct! +10 XP 🔥";s.xp+=10;s.q.correct++;s.q.xp+=10;score++}else{b.classList.add("wrong");s.hearts--;fb.textContent="Wrong 😭 Correct: "+correct;document.querySelectorAll(".ans").forEach(x=>{if(decodeURIComponent(x.dataset.v)===correct)x.classList.add("correct")})}save();render();if(s.hearts<=0){setTimeout(()=>{i=0;score=0;s.hearts=5;save();render();body.innerHTML=`<div class=result><div class=emoji>💔</div><h2>Session restarted!</h2><p>You lost all your hearts, so this lesson starts again from question 1.</p><button class=next onclick="question()">Restart lesson</button></div>`},500)}else next.disabled=false}
+function finish(){s.done[ui]=true;s.streak++;s.hearts=Math.min(5,s.hearts+1);if(score===cur.length)s.perfect=true;save();render();body.innerHTML=`<div class=result><div class=emoji>${score===cur.length?'🏆':'🎉'}</div><h2>Lesson complete!</h2><p>${score}/${cur.length} correct · +${score*10} XP · ❤️ +1</p><button class=next onclick="closeM()">Back to map</button></div>`}
+function settings(){openM();body.innerHTML=`<h2>⚙️ Settings</h2><button class=next onclick="s.sound=!s.sound;save();settings()">🔊 Sound: ${s.sound?'ON':'OFF'}</button><br><br><button class=next onclick="s.hearts=5;save();render();settings()">❤️ Refill Hearts</button><br><br><button class=next style="background:#e44" onclick="if(confirm('Reset all progress?')){localStorage.removeItem('trucklingo-aero');location.reload()}">Reset Progress</button>`}
+render();
+</script></body></html>
